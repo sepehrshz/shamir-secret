@@ -3,7 +3,12 @@ import random
 def shares_generator(S, t, n, p):
     coefficients = [S] + [random.randint(0, p - 1) for _ in range(t - 1)]
     
-    
+    shares = []
+    for i in range(1, n + 1):
+        y = sum([coefficients[j] * (i ** j) for j in range(t)]) % p
+        shares.append((i, y))
+
+    return shares
 
 S_value = 2797
 t_threshold = 8
