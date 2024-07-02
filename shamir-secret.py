@@ -18,7 +18,8 @@ p_prime = 8797
 shares_generated = shares_generator(S_value, t_threshold, n_shares, p_prime)
 print("Shares:", shares_generated)
 
-def lagrange(x, y, p_val):
+def find_secret(shares, t, p):
+    def lagrange(x, y, p_val):
         secret = 0
         for i in range(len(x)):
             sum = 1
@@ -27,3 +28,12 @@ def lagrange(x, y, p_val):
                     sum *= (x[j]) * pow(x[j] - x[i], -1, p_val)
             secret += y[i] * sum
         return secret % p_val
+
+    x, y = zip(*shares)
+    secret_polynomial = lagrange(x, y, p)
+    
+    return int(secret_polynomial) % p
+
+t_shares = shares_generated[:t_threshold]
+secret = find_secret(t_shares, t_threshold, p_prime)
+print("Secret:", secret)
